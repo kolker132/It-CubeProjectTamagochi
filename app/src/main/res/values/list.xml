@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="parts_of_years">
+        <item>Весна</item>
+        <item>Лето</item>
+        <item>Осень</item>
+        <item>Зима</item>
+    </string-array>
+</resources>

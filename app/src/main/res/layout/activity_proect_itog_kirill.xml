@@ -7,7 +7,7 @@
     tools:context=".ProectItogKirillActivity">
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/but2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="→"
@@ -19,7 +19,7 @@
         app:layout_constraintVertical_bias="0.888" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/but4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="←"
@@ -31,7 +31,7 @@
         app:layout_constraintVertical_bias="0.888" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/but1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="↑"
@@ -43,7 +43,7 @@
         app:layout_constraintVertical_bias="0.818" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/but3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="↓"

@@ -1,13 +1,15 @@
 package com.example.kirill;
 
+import java.util.Objects;
+
 public class MyMonth {
-    private  String month;
-    private  double temp;
-    private  int days;
-    private  boolean like;
+    private String month;
+    private double temp;
+    private int days;
+    private boolean like;
 
     public MyMonth(String month, double temp, int days) {
-        this.month = month;
+        this.setMonth(month);
         this.temp = temp;
         this.days = days;
     }
@@ -42,5 +44,23 @@ public class MyMonth {
 
     public void setLike(boolean like) {
         this.like = like;
+    }
+
+    public int hashCode() {
+        return Objects.hash(days, temp, month);
+    }
+
+    public boolean equals(Object m2) {
+        if (m2 == null || !(m2.getClass().equals(this.getClass()))) {
+            return false;
+        }
+        boolean me = month.equals(((MyMonth) m2).getMonth());
+        boolean te = temp == ((MyMonth) m2).getTemp();
+        boolean da = days == ((MyMonth) m2).getDays();
+        return me && da && te;
+    }
+
+    public String toString() {
+        return  month;
     }
 }

@@ -14,9 +14,12 @@ import android.widget.Button;
 
 public class TamagochiActivity extends AppCompatActivity {
     ConstraintLayout constraintLayout;
-    Button up,down,right,left1;
+    Button up, down, right, left1;
     DrawView dv;
+    int dx = 0;
+    int dy = 0;
     boolean start;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,24 +31,79 @@ public class TamagochiActivity extends AppCompatActivity {
         constraintLayout = findViewById(R.id.constraint1);
         dv = new DrawView(this);
         constraintLayout.addView(dv);
+
         CountDownTimer upCountDownTimer = new CountDownTimer(Long.MAX_VALUE, 15) {
+
             @Override
             public void onTick(long millisUntilFinished) {
-                if(start) {
-                    dv.getTamagochi().move(-5, 0);
+                if (start) {
+                    dv.getTamagochi().move(dx, dy);
                 }
+
             }
+
             @Override
-            public void onFinish() {}
+            public void onFinish() {
+            }
         };
         left1.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN ) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    dx = -5;
+                    dy = 0;
                     upCountDownTimer.start();
                     start = true;
                 }
-                if (event.getAction() == MotionEvent.ACTION_UP ) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    start = false;
+                    upCountDownTimer.cancel();
+                }
+                return true;
+            }
+        });
+        right.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    dx = 5;
+                    dy = 0;
+                    upCountDownTimer.start();
+                    start = true;
+                }
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    start = false;
+                    upCountDownTimer.cancel();
+                }
+                return true;
+            }
+        });
+        up.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    dx = 0;
+                    dy = -5;
+                    upCountDownTimer.start();
+                    start = true;
+                }
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    start = false;
+                    upCountDownTimer.cancel();
+                }
+                return true;
+            }
+        });
+        down.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    dx = 0;
+                    dy = 5;
+                    upCountDownTimer.start();
+                    start = true;
+                }
+                if (event.getAction() == MotionEvent.ACTION_UP) {
                     start = false;
                     upCountDownTimer.cancel();
                 }

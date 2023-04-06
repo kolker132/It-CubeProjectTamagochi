@@ -22,7 +22,7 @@ public class Tamagochi extends Thread {
         backgroundPaint.setStyle(Paint.Style.FILL);
     }
     public Tamagochi(Context context, SurfaceHolder surfaceHolder) {
-        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.smile);
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.smile12345);
         this.surfaceHolder = surfaceHolder;
     }
 

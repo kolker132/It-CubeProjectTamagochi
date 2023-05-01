@@ -37,7 +37,7 @@ public class MyMonthAdapter extends ArrayAdapter<MyMonth> {
         if (item.isLike()) {
             convertView.setBackgroundColor(Color.MAGENTA);
         }else{
-            convertView.setBackgroundColor(Color.WHITE);
+            convertView.setBackgroundColor(Color.BLACK);
         }
         like.setOnCheckedChangeListener(null);
         like.setChecked(item.isLike());

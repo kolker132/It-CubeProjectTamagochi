@@ -1,16 +1,15 @@
-package com.example.kirill;
+package com.example.kirill.Tamagochi;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.Constraints;
 
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.kirill.R;
 
 public class TamagochiActivity extends AppCompatActivity {
     ConstraintLayout constraintLayout;

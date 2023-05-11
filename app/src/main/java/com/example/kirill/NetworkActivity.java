@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.kirill.retro.RetroHelper;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -19,23 +20,23 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.OkHttp;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class NetworkActivity extends AppCompatActivity {
-    Button button;
+    Button button, save;
     TextView tv;
     EditText email,pwd;
     ListView usersLV;
     ArrayList<User> users = new ArrayList<>();
+    Retrofit r;
+    ArrayAdapter a;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,62 +44,53 @@ public class NetworkActivity extends AppCompatActivity {
         setContentView(R.layout.activity_network);
         tv = new TextView(getBaseContext());
         button = new Button(getBaseContext());
+        save = new Button(getBaseContext());
         email = new EditText(getBaseContext());
         pwd = new EditText(getBaseContext());
         usersLV = new ListView(getBaseContext());
         tv.setHint("Тут ответ с сервера");
         button.setText("Отправить запрос");
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                send();
-            }
-        });
+        save.setText("Создать пользователся");
+        save.setOnClickListener((v) -> save());
 
         LinearLayout layout = findViewById(R.id.layout5);
 
         layout.addView(tv);
         layout.addView(button);
+        layout.addView(save);
         layout.addView(email);
         layout.addView(pwd);
         layout.addView(usersLV);
-        ArrayAdapter a = new ArrayAdapter(getBaseContext(), android.R.layout.simple_list_item_1, users);
+        a = new ArrayAdapter(getBaseContext(), android.R.layout.simple_list_item_1, users);
         usersLV.setAdapter(a);
+
+        r = RetroHelper.getServer();
+
+    }
+
+    public void save() {
+
+        UserService s = r.create(UserService.class);
+        User user = new User("Lastname" + Math.random(),"Name" + Math.random(), 6);
+        Call<Void> call = s.saveUser(user);
+        call.enqueue(new MyCallback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                send();
+
+            }
+        });
     }
     public void send() {
-        OkHttpClient client = new OkHttpClient();
-        RequestBody body = new FormBody.Builder()
-        .add("email", email.getText().toString())
-        .add("pwd", pwd.getText().toString())
-        .build();
-        Request request = new Request.Builder()
-                .url("http://192.168.1.119:8080/user")
-                .post(body)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
+        UserService s = r.create(UserService.class);
+        Call<List<User>> call = s.users(email.getText().toString(), pwd.getText().toString());
+        call.enqueue(new MyCallback<List<User>>() {
             @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                int code = response.code();
-                String body = response.body().string();
-                if (code < 300) {
-                    runOnUiThread(() -> {
-                        Gson gs = new Gson();
-                        User[] u = gs.fromJson(body, User[].class);
-                        tv.setText(body);
-                        users.clear();
-                        users.addAll(Arrays.asList(u));
-                    });
-                }else {
-                    runOnUiThread(() -> {
-                        tv.setText("Произошла ошибка!" + code);
-                    });
-                }
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                List<User> body = response.body();
+                users.clear();
+                users.addAll(body);
+                a.notifyDataSetChanged();
             }
         });
     }

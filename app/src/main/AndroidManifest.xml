@@ -82,7 +82,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".TamagochiActivity"
+            android:name=".Tamagochi.TamagochiActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

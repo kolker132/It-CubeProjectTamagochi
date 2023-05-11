@@ -34,4 +34,9 @@ public class User {
     public void setSchool(int school) {
         this.school = school;
     }
+
+    @Override
+    public String toString() {
+        return lastname + " " + name;
+    }
 }

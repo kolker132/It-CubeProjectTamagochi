@@ -1,9 +1,11 @@
-package com.example.kirill;
+package com.example.kirill.Tamagochi;
 
 import android.content.Context;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import com.example.kirill.Tamagochi.Tamagochi;
 
 public class DrawView extends SurfaceView implements SurfaceHolder.Callback {
 

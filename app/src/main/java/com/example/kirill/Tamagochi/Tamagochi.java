@@ -16,9 +16,14 @@ public class Tamagochi extends Thread {
     private volatile boolean running = true;
     private Paint backgroundPaint = new Paint();
     Paint paint = new Paint();
+    private Paint dest =new Paint();
+    private Paint endpaint=new Paint();
     private Bitmap bitmap;
+    private Bitmap reset;
+    private boolean die =false;
     private int towardPointX = 550;
     private int towardPointY = 1500;
+    private boolean start =true;
     int smileX = 450;
     int smileY = 1400;
     int smileXP = 100;
@@ -26,11 +31,16 @@ public class Tamagochi extends Thread {
     {
         backgroundPaint.setColor(Color.WHITE);
         backgroundPaint.setStyle(Paint.Style.FILL);
+        endpaint.setColor(Color.RED);
+        endpaint.setTextSize((float) 100);
+        dest.setColor(Color.BLACK);
+        dest.setTextSize(75);
     }
 
     public Tamagochi(Context context, SurfaceHolder surfaceHolder) {
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.smile12345);
         this.surfaceHolder = surfaceHolder;
+        reset=BitmapFactory.decodeResource(context.getResources(), R.drawable.reset);
     }
 
     public void requestStop() {
@@ -47,29 +57,37 @@ public class Tamagochi extends Thread {
         towardPointY += dy;
 
     }
-
     int room = 0;
-    Rect r1;
-    Rect r2;
-    Rect r3;
+    Rect left;
+    Rect top;
+    Rect right;
+    Rect r4;
+    Rect r5;
     Rect destination;
+    Rect destinationres;
+    Rect srcreset;
 
     @Override
     public void run() {
         while (running) {
             Canvas canvas = surfaceHolder.lockCanvas();
-            destination = new Rect(smileX, smileY, smileX + 200, smileY + 200);
-            r3 = new Rect(canvas.getWidth() - 25, canvas.getHeight() / 2, canvas.getWidth(), canvas.getHeight() / 2 + 300);
-            r2 = new Rect(canvas.getWidth() / 2 + 150, 0, canvas.getWidth() / 3 + 25, 25);
-            r1 = new Rect(0, canvas.getHeight() / 2, 25, canvas.getHeight() / 2 + 300);
-            canvas.drawText("XP-" + smileXP, 1000, 2000, paint);
-            if (r1.intersect(destination)) {
-                room = 1;
-            } else if (r2.intersect(destination)) {
-                room = 2;
-            } else if (r3.intersect(destination)) {
-                room = 3;
+            int h = canvas.getHeight();
+            int w = canvas.getWidth();
+            destination = new Rect(smileX  , smileY, smileX + 390, smileY + 200);
+            right = new Rect(w - 25, h / 2, w, h / 2 + 300);
+            top = new Rect(w / 2 + 150, 0, w / 3 + 25, 25);
+            r4 = new Rect(w / 2 + 150, 0, w , 500);
+            r5 = new Rect(w / 2 + 150, 0 , w , 500);
+            left = new Rect(0, h / 2, 25, h / 2 + 300);
+            canvas.drawText("XP-" + smileXP, h - 200, w + 200, dest);
+            destinationres = new Rect(w /2-100, h /2-300, w /2+100, h /2-100);
+            srcreset = new Rect(0,0,reset.getWidth(),reset.getHeight());
+            if(die){
+                canvas.drawBitmap(reset,srcreset,destinationres,new Paint());
+                canvas.drawRect(0, 0, w, h, new Paint());
+                canvas.drawText("YOU DIE", (float) w / 2 - 150, (float) h / 2, endpaint);
             }
+
             if (canvas != null) {
                 try {
                     switch (room) {
@@ -93,6 +111,7 @@ public class Tamagochi extends Thread {
         }
     }
 
+
     private void mainroom(Canvas canvas) {
         canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), backgroundPaint);
         canvas.drawBitmap(bitmap, smileX, smileY, backgroundPaint);
@@ -101,9 +120,16 @@ public class Tamagochi extends Thread {
         if (smileY + bitmap.getHeight() / 2 < towardPointY) smileY += 5;
         if (smileY + bitmap.getHeight() / 2 > towardPointY) smileY -= 5;
         paint.setColor(Color.GRAY);
-        canvas.drawRect(r1, paint);
-        canvas.drawRect(r2, paint);
-        canvas.drawRect(r3, paint);
+        canvas.drawRect(left, paint);
+        canvas.drawRect(top, paint);
+        canvas.drawRect(right, paint);
+        if (left.intersect(destination)) {
+            room = 1;
+        } else if (top.intersect(destination)) {
+            room = 2;
+        } else if (right.intersect(destination)) {
+            room = 3;
+        }
     }
 
     private void leftroom(Canvas canvas) {
@@ -114,7 +140,13 @@ public class Tamagochi extends Thread {
         if (smileY + bitmap.getHeight() / 2 < towardPointY) smileY += 5;
         if (smileY + bitmap.getHeight() / 2 > towardPointY) smileY -= 5;
         paint.setColor(Color.GRAY);
-        canvas.drawRect(r3, paint);
+        canvas.drawRect(right, paint);
+        paint.setColor(Color.RED);
+        canvas.drawRect(r4, paint);
+        if (right.intersect(destination)) {
+            room = 0;
+            smileX = 60;
+        }
     }
 
     private void uproom(Canvas canvas) {
@@ -125,7 +157,12 @@ public class Tamagochi extends Thread {
         if (smileY + bitmap.getHeight() / 2 < towardPointY) smileY += 5;
         if (smileY + bitmap.getHeight() / 2 > towardPointY) smileY -= 5;
         paint.setColor(Color.GRAY);
-        canvas.drawRect(r2, paint);
+        canvas.drawRect(r5, paint);
+        if (r5.intersect(destination)) {
+            room = 0;
+            smileX = 1;
+        }
+
     }
 
     private void rightroom(Canvas canvas) {
@@ -136,6 +173,11 @@ public class Tamagochi extends Thread {
         if (smileY + bitmap.getHeight() / 2 < towardPointY) smileY += 5;
         if (smileY + bitmap.getHeight() / 2 > towardPointY) smileY -= 5;
         paint.setColor(Color.GRAY);
-        canvas.drawRect(r1, paint);
+        canvas.drawRect(left, paint);
+        if (left.intersect(destination)) {
+            room = 0;
+            smileX = canvas.getHeight() - 110;
+
+        }
     }
 }

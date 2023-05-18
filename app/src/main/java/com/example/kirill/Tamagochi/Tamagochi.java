@@ -21,6 +21,7 @@ public class Tamagochi extends Thread {
     private int towardPointY = 1500;
     int smileX = 450;
     int smileY = 1400;
+    int smileXP = 100;
 
     {
         backgroundPaint.setColor(Color.WHITE);
@@ -61,6 +62,7 @@ public class Tamagochi extends Thread {
             r3 = new Rect(canvas.getWidth() - 25, canvas.getHeight() / 2, canvas.getWidth(), canvas.getHeight() / 2 + 300);
             r2 = new Rect(canvas.getWidth() / 2 + 150, 0, canvas.getWidth() / 3 + 25, 25);
             r1 = new Rect(0, canvas.getHeight() / 2, 25, canvas.getHeight() / 2 + 300);
+            canvas.drawText("XP-" + smileXP, 1000, 2000, paint);
             if (r1.intersect(destination)) {
                 room = 1;
             } else if (r2.intersect(destination)) {

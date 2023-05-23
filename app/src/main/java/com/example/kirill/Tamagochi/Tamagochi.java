@@ -77,10 +77,10 @@ public class Tamagochi extends Thread {
             int w = canvas.getWidth();
             destination = new Rect(smileX   , smileY , smileX + 200, smileY + 200);
             right = new Rect(w - 25, h / 2, w, h / 2 + 300);
-            up = new Rect(w / 2 + 150, 0, w / 3 + 25, 25);
+            up = new Rect(w / 3 + 150, 0, w / 2 + 25, 25);
             r4 = new Rect(w / 2 + 150, 0, w , 500);
             r6 = new Rect(w / 2 + 150, 0, w , 500);
-            r5 = new Rect(w / 2 + 150, h, w / 3 + 25, h - 25);
+            r5 = new Rect(w / 3 + 150, h, w / 2 + 25, h - 25);
             left = new Rect(0, h / 2, 25, h / 2 + 300);
             if (r4.contains(destination)) {
                 smileXP--;

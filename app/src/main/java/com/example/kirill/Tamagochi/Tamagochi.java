@@ -20,13 +20,15 @@ public class Tamagochi extends Thread {
     private Paint endpaint=new Paint();
     private Bitmap bitmap;
     private Bitmap reset;
-    private boolean die =false;
+
     private int towardPointX = 550;
     private int towardPointY = 1500;
     private boolean start =true;
+    private boolean die =false;
     int smileX = 450;
     int smileY = 1400;
     int smileXP = 100;
+    Rect src;
 
     {
         backgroundPaint.setColor(Color.WHITE);
@@ -39,6 +41,7 @@ public class Tamagochi extends Thread {
 
     public Tamagochi(Context context, SurfaceHolder surfaceHolder) {
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.smile12345);
+        src = new Rect(0,0,bitmap.getWidth(),bitmap.getHeight());
         this.surfaceHolder = surfaceHolder;
         reset=BitmapFactory.decodeResource(context.getResources(), R.drawable.reset);
     }
@@ -59,13 +62,12 @@ public class Tamagochi extends Thread {
     }
     int room = 0;
     Rect left;
-    Rect top;
+    Rect up;
     Rect right;
     Rect r4;
     Rect r5;
+    Rect r6;
     Rect destination;
-    Rect destinationres;
-    Rect srcreset;
 
     @Override
     public void run() {
@@ -73,19 +75,15 @@ public class Tamagochi extends Thread {
             Canvas canvas = surfaceHolder.lockCanvas();
             int h = canvas.getHeight();
             int w = canvas.getWidth();
-            destination = new Rect(smileX  , smileY, smileX + 390, smileY + 200);
+            destination = new Rect(smileX   , smileY , smileX + 200, smileY + 200);
             right = new Rect(w - 25, h / 2, w, h / 2 + 300);
-            top = new Rect(w / 2 + 150, 0, w / 3 + 25, 25);
+            up = new Rect(w / 2 + 150, 0, w / 3 + 25, 25);
             r4 = new Rect(w / 2 + 150, 0, w , 500);
-            r5 = new Rect(w / 2 + 150, 0 , w , 500);
+            r6 = new Rect(w / 2 + 150, 0, w , 500);
+            r5 = new Rect(w / 2 + 150, h, w / 3 + 25, h - 25);
             left = new Rect(0, h / 2, 25, h / 2 + 300);
-            canvas.drawText("XP-" + smileXP, h - 200, w + 200, dest);
-            destinationres = new Rect(w /2-100, h /2-300, w /2+100, h /2-100);
-            srcreset = new Rect(0,0,reset.getWidth(),reset.getHeight());
-            if(die){
-                canvas.drawBitmap(reset,srcreset,destinationres,new Paint());
-                canvas.drawRect(0, 0, w, h, new Paint());
-                canvas.drawText("YOU DIE", (float) w / 2 - 150, (float) h / 2, endpaint);
+            if (r4.contains(destination)) {
+                smileXP--;
             }
 
             if (canvas != null) {
@@ -114,31 +112,49 @@ public class Tamagochi extends Thread {
 
     private void mainroom(Canvas canvas) {
         canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), backgroundPaint);
-        canvas.drawBitmap(bitmap, smileX, smileY, backgroundPaint);
+        canvas.drawBitmap(bitmap, src, destination, backgroundPaint);
+        defRect(canvas);
+        canvas.drawText("XP=" + smileXP, canvas.getWidth() - 275,canvas.getHeight() - 250 , dest);
+        canvas.drawText("Eat=" + smileXP, canvas.getWidth() - 275,canvas.getHeight() - 175 , dest);
+        canvas.drawText("Slp=" + smileXP, canvas.getWidth() - 275,canvas.getHeight() - 100 , dest);
         if (smileX + bitmap.getWidth() / 2 < towardPointX) smileX += 5;
         if (smileX + bitmap.getWidth() / 2 > towardPointX) smileX -= 5;
         if (smileY + bitmap.getHeight() / 2 < towardPointY) smileY += 5;
         if (smileY + bitmap.getHeight() / 2 > towardPointY) smileY -= 5;
         paint.setColor(Color.GRAY);
         canvas.drawRect(left, paint);
-        canvas.drawRect(top, paint);
+        canvas.drawRect(up, paint);
         canvas.drawRect(right, paint);
         if (left.intersect(destination)) {
             room = 1;
-        } else if (top.intersect(destination)) {
+        } else if (up.intersect(destination)) {
             room = 2;
         } else if (right.intersect(destination)) {
             room = 3;
         }
+        if(die){
+            canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), new Paint());
+            canvas.drawText("СМЕРТЬ", (float) canvas.getWidth() / 2 - 150, (float) canvas.getHeight() / 2, endpaint);
+        }
+        if (smileXP <= 0) {
+            start = false;
+            die = true;
+        }
+    }
+
+    private void defRect(Canvas canvas) {
+        Paint p = new Paint();
+        p.setStyle(Paint.Style.STROKE);
+        p.setColor(Color.BLUE);
+        canvas.drawRect(destination,p);
     }
 
     private void leftroom(Canvas canvas) {
         canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), backgroundPaint);
-        canvas.drawBitmap(bitmap, smileX, smileY, backgroundPaint);
-        if (smileX + bitmap.getWidth() / 2 < towardPointX) smileX += 5;
-        if (smileX + bitmap.getWidth() / 2 > towardPointX) smileX -= 5;
-        if (smileY + bitmap.getHeight() / 2 < towardPointY) smileY += 5;
-        if (smileY + bitmap.getHeight() / 2 > towardPointY) smileY -= 5;
+        canvas.drawBitmap(bitmap,src,destination,backgroundPaint);
+        canvas.drawText("XP=" + smileXP, canvas.getWidth() - 275,canvas.getHeight() - 250 , dest);
+        canvas.drawText("Eat=" + smileXP, canvas.getWidth() - 275,canvas.getHeight() - 175 , dest);
+        canvas.drawText("Sleep=" + smileXP, canvas.getWidth() - 275,canvas.getHeight() - 100 , dest);
         paint.setColor(Color.GRAY);
         canvas.drawRect(right, paint);
         paint.setColor(Color.RED);
@@ -147,36 +163,74 @@ public class Tamagochi extends Thread {
             room = 0;
             smileX = 60;
         }
-    }
-
-    private void uproom(Canvas canvas) {
-        canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), backgroundPaint);
-        canvas.drawBitmap(bitmap, smileX, smileY, backgroundPaint);
         if (smileX + bitmap.getWidth() / 2 < towardPointX) smileX += 5;
         if (smileX + bitmap.getWidth() / 2 > towardPointX) smileX -= 5;
         if (smileY + bitmap.getHeight() / 2 < towardPointY) smileY += 5;
         if (smileY + bitmap.getHeight() / 2 > towardPointY) smileY -= 5;
+        defRect(canvas);
+        if(die){
+            canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), new Paint());
+            canvas.drawText("СМЕРТЬ", (float) canvas.getWidth() / 2 - 150, (float) canvas.getHeight() / 2, endpaint);
+        }
+        if (smileXP <= 0) {
+            start = false;
+            die = true;
+        }
+    }
+
+    private void uproom(Canvas canvas) {
+        canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), backgroundPaint);
+        canvas.drawBitmap(bitmap,src,destination,backgroundPaint);
+        canvas.drawText("XP=" + smileXP, canvas.getWidth() - 275,canvas.getHeight() - 250 , dest);
+        canvas.drawText("Eat=" + smileXP, canvas.getWidth() - 275,canvas.getHeight() - 175 , dest);
+        canvas.drawText("Sleep=" + smileXP, canvas.getWidth() - 275,canvas.getHeight() - 100 , dest);
         paint.setColor(Color.GRAY);
         canvas.drawRect(r5, paint);
         if (r5.intersect(destination)) {
             room = 0;
             smileX = 1;
         }
-
-    }
-
-    private void rightroom(Canvas canvas) {
-        canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), backgroundPaint);
-        canvas.drawBitmap(bitmap, smileX, smileY, backgroundPaint);
         if (smileX + bitmap.getWidth() / 2 < towardPointX) smileX += 5;
         if (smileX + bitmap.getWidth() / 2 > towardPointX) smileX -= 5;
         if (smileY + bitmap.getHeight() / 2 < towardPointY) smileY += 5;
         if (smileY + bitmap.getHeight() / 2 > towardPointY) smileY -= 5;
+        defRect(canvas);
+        if(die){
+            canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), new Paint());
+            canvas.drawText("СМЕРТЬ", (float) canvas.getWidth() / 2 - 150, (float) canvas.getHeight() / 2, endpaint);
+        }
+        if (smileXP <= 0) {
+            start = false;
+            die = true;
+        }
+    }
+
+    private void rightroom(Canvas canvas) {
+        canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), backgroundPaint);
+        canvas.drawBitmap(bitmap,src,destination,backgroundPaint);
+        canvas.drawText("XP=" + smileXP, canvas.getWidth() - 275,canvas.getHeight() - 250 , dest);
+        canvas.drawText("Eat=" + smileXP, canvas.getWidth() - 275,canvas.getHeight() - 175 , dest);
+        canvas.drawText("Sleep=" + smileXP, canvas.getWidth() - 275,canvas.getHeight() - 100 , dest);
+        if (smileX + bitmap.getWidth() / 2 < towardPointX) smileX += 5;
+        if (smileX + bitmap.getWidth() / 2 > towardPointX) smileX -= 5;
+        if (smileY + bitmap.getHeight() / 2 < towardPointY) smileY += 5;
+        if (smileY + bitmap.getHeight() / 2 > towardPointY) smileY -= 5;
+        paint.setColor(Color.BLUE);
+        canvas.drawRect(r4, paint);
+        defRect(canvas);
         paint.setColor(Color.GRAY);
         canvas.drawRect(left, paint);
+        if(die){
+            canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), new Paint());
+            canvas.drawText("СМЕРТЬ", (float) canvas.getWidth() / 2 - 150, (float) canvas.getHeight() / 2, endpaint);
+        }
         if (left.intersect(destination)) {
             room = 0;
-            smileX = canvas.getHeight() - 110;
+            smileX = canvas.getHeight() - 1100;
+            if (smileXP <= 0) {
+                start = false;
+                die = true;
+            }
 
         }
     }

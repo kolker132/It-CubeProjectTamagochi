@@ -20,7 +20,6 @@ public class Tamagochi extends Thread {
     private Paint dest =new Paint();
     private Paint endpaint=new Paint();
     private Bitmap bitmap;
-    private Bitmap reset;
 
     private int towardPointX = 550;
     private int towardPointY = 1500;
@@ -28,7 +27,7 @@ public class Tamagochi extends Thread {
     private boolean die =false;
     int smileX = 450;
     int smileY = 1400;
-    int smileXP = 1000;
+    int smileXP = 100;
     int smileSleep = 100;
     int smileEat = 100;
     int smileFun = 100;
@@ -37,7 +36,7 @@ public class Tamagochi extends Thread {
     {
         backgroundPaint.setColor(Color.WHITE);
         backgroundPaint.setStyle(Paint.Style.FILL);
-        endpaint.setColor(Color.RED);
+        endpaint.setColor(Color.WHITE);
         endpaint.setTextSize((float) 100);
         dest.setColor(Color.BLACK);
         dest.setTextSize(75);
@@ -58,10 +57,9 @@ public class Tamagochi extends Thread {
         towardPointY = y;
     }
 
-    public void move(int dx, int dy, int touchbut) {
+    public void move(int dx, int dy) {
         towardPointX += dx;
         towardPointY += dy;
-        towardPointY += touchbut;
     }
     int room = 0;
     Rect left;
@@ -109,9 +107,10 @@ public class Tamagochi extends Thread {
             } else {
                 smileFun--;
             }
-            if (smileEat <= 0 ) {
+            if (smileEat <= 0) {
                 smileXP--;
             }
+
             if (smileFun <= 0) {
                 smileXP--;
             }
@@ -195,7 +194,7 @@ public class Tamagochi extends Thread {
         }
         if(die){
             canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), new Paint());
-            canvas.drawText("You Dead", (float) canvas.getWidth() / 2 - 150, (float) canvas.getHeight() / 2, endpaint);
+            canvas.drawText("GAME OVER", (float) canvas.getWidth() / 2 - 150, (float) canvas.getHeight() / 2, endpaint);
         }
         if (smileXP <= 0) {
             start = false;
@@ -231,7 +230,7 @@ public class Tamagochi extends Thread {
         }
         if(die){
             canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), new Paint());
-            canvas.drawText("You Dead", (float) canvas.getWidth() / 2 - 150, (float) canvas.getHeight() / 2, endpaint);
+            canvas.drawText("GAME OVER", (float) canvas.getWidth() / 2 - 150, (float) canvas.getHeight() / 2, endpaint);
         }
     }
 
@@ -262,7 +261,7 @@ public class Tamagochi extends Thread {
         canvas.drawBitmap(bitmap,src,destination,backgroundPaint);
         if(die){
             canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), new Paint());
-            canvas.drawText("You Dead", (float) canvas.getWidth() / 2 - 150, (float) canvas.getHeight() / 2, endpaint);
+            canvas.drawText("GAME OVER", (float) canvas.getWidth() / 2 - 150, (float) canvas.getHeight() / 2, endpaint);
         }
 
     }
@@ -295,7 +294,7 @@ public class Tamagochi extends Thread {
         canvas.drawBitmap(bitmap,src,destination,backgroundPaint);
         if(die){
             canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), new Paint());
-            canvas.drawText("СМЕРТЬ", (float) canvas.getWidth() / 2 - 150, (float) canvas.getHeight() / 2, endpaint);
+            canvas.drawText("GAME OVER", (float) canvas.getWidth() / 2 - 150, (float) canvas.getHeight() / 2, endpaint);
         }
     }
 }

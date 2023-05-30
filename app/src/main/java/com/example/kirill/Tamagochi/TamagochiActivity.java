@@ -17,7 +17,6 @@ public class TamagochiActivity extends AppCompatActivity {
     DrawView dv;
     int dx = 0;
     int dy = 0;
-    int touchbut = 0;
     boolean start;
 
     @Override
@@ -37,7 +36,7 @@ public class TamagochiActivity extends AppCompatActivity {
             @Override
             public void onTick(long millisUntilFinished) {
                 if (start) {
-                    dv.getTamagochi().move(dx, dy, touchbut);
+                    dv.getTamagochi().move(dx, dy);
                 }
 
             }

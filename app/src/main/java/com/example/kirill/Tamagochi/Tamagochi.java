@@ -31,7 +31,6 @@ public class Tamagochi extends Thread {
     int smileXP = 1000;
     int smileSleep = 100;
     int smileEat = 100;
-    int smileFatigue = 100;
     int smileFun = 100;
     Rect src;
 
@@ -48,7 +47,6 @@ public class Tamagochi extends Thread {
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.smile12345);
         src = new Rect(0,0,bitmap.getWidth(),bitmap.getHeight());
         this.surfaceHolder = surfaceHolder;
-        reset=BitmapFactory.decodeResource(context.getResources(), R.drawable.reset);
     }
 
     public void requestStop() {
@@ -177,7 +175,6 @@ public class Tamagochi extends Thread {
         canvas.drawText("Eat=" + smileEat, canvas.getWidth() - 285,canvas.getHeight() - 250 , dest);
         canvas.drawText("Slp=" + smileSleep, canvas.getWidth() - 285,canvas.getHeight() - 175 , dest);
         canvas.drawText("Fun=" + smileFun, canvas.getWidth() - 285,canvas.getHeight() - 100 , dest);
-        canvas.drawText("Ftg=" + smileFatigue, canvas.getWidth() - 285,canvas.getHeight() - 25 , dest);
         if (smileX + bitmap.getWidth() / 2 < towardPointX) smileX += 5;
         if (smileX + bitmap.getWidth() / 2 > towardPointX) smileX -= 5;
         if (smileY + bitmap.getHeight() / 2 < towardPointY) smileY += 5;
@@ -217,7 +214,6 @@ public class Tamagochi extends Thread {
         canvas.drawText("XP=" + smileXP, canvas.getWidth() - 285,canvas.getHeight() - 325 , dest);
         canvas.drawText("Eat=" + smileEat, canvas.getWidth() - 285,canvas.getHeight() - 250 , dest);
         canvas.drawText("Slp=" + smileSleep, canvas.getWidth() - 285,canvas.getHeight() - 175 , dest);
-        canvas.drawText("Ftg=" + smileFatigue, canvas.getWidth() - 285,canvas.getHeight() - 25 , dest);
         canvas.drawText("Fun=" + smileFun, canvas.getWidth() - 285,canvas.getHeight() - 100 , dest);
         paint.setColor(Color.GRAY);
         canvas.drawRect(right, paint);
@@ -247,7 +243,6 @@ public class Tamagochi extends Thread {
         canvas.drawText("XP=" + smileXP, canvas.getWidth() - 285,canvas.getHeight() - 325 , dest);
         canvas.drawText("Eat=" + smileEat, canvas.getWidth() - 285,canvas.getHeight() - 250 , dest);
         canvas.drawText("Slp=" + smileSleep, canvas.getWidth() - 285,canvas.getHeight() - 175 , dest);
-        canvas.drawText("Ftg=" + smileFatigue, canvas.getWidth() - 285,canvas.getHeight() - 25 , dest);
         canvas.drawText("Fun=" + smileFun, canvas.getWidth() - 285,canvas.getHeight() - 100 , dest);
 
         paint.setColor(Color.GRAY);
@@ -278,7 +273,6 @@ public class Tamagochi extends Thread {
         canvas.drawText("XP=" + smileXP, canvas.getWidth() - 285,canvas.getHeight() - 325 , dest);
         canvas.drawText("Eat=" + smileEat, canvas.getWidth() - 285,canvas.getHeight() - 250 , dest);
         canvas.drawText("Slp=" + smileSleep, canvas.getWidth() - 285,canvas.getHeight() - 175 , dest);
-        canvas.drawText("Ftg=" + smileFatigue, canvas.getWidth() - 285,canvas.getHeight() - 25 , dest);
         canvas.drawText("Fun=" + smileFun, canvas.getWidth() - 285,canvas.getHeight() - 100 , dest);
         if (smileX + bitmap.getWidth() / 2 < towardPointX) smileX += 5;
         if (smileX + bitmap.getWidth() / 2 > towardPointX) smileX -= 5;

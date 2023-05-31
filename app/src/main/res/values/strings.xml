@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Kirill</string>
+    <string name="app_name" translatable="false">Tamagochi</string>
     <string name="callback" />
     <string name="ccopy" />
 </resources>
